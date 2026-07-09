@@ -69,13 +69,6 @@
 </head>
 <body>
 
-<div id="ageGate">
-  <h1>The <span style="color:var(--green)">Terpene</span> Sommelier</h1>
-  <p>Cannabis expertise · curated.<br><br>This experience contains cannabis product information. You must be 19 years of age or older to continue.</p>
-  <button class="btn" id="ageYes">I am 19 or older</button>
-  <button class="btn ghost" id="ageNo">I am under 19</button>
-</div>
-
 <div class="wrap">
   <header>
     <div>
@@ -124,16 +117,6 @@
 <script>
 (function(){
   "use strict";
-
-  /* ----- age gate ----- */
-  var gate=document.getElementById("ageGate");
-  if(localStorage.getItem("ts_age_ok")==="1")gate.classList.add("hide");
-  document.getElementById("ageYes").addEventListener("click",function(){
-    localStorage.setItem("ts_age_ok","1");gate.classList.add("hide");
-  });
-  document.getElementById("ageNo").addEventListener("click",function(){
-    gate.innerHTML="<p style='color:var(--ink-dim)'>This experience is only available to adults 19+.</p>";
-  });
 
   /* ----- tabs ----- */
   var scanView=document.getElementById("scanView"),collView=document.getElementById("collView");
