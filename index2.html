@@ -7,153 +7,82 @@
 <title>The Terpene Sommelier · Scan</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/@zxing/library@0.21.3/umd/index.min.js"></script>
 <style>
   :root{
-    --green:#31AA64;
-    --surface:#2D3139;
-    --bg:#16181A;
-    --ink:#F2F3F4;
-    --ink-dim:#9AA0A6;
-    --card-radius:18px;
+    --green:#31AA64; --surface:#2D3139; --bg:#16181A;
+    --ink:#F2F3F4; --ink-dim:#9AA0A6; --card-radius:18px;
   }
   *{box-sizing:border-box;margin:0;padding:0}
   html,body{height:100%}
-  body{
-    background:var(--bg);
-    color:var(--ink);
-    font-family:'DM Sans',system-ui,sans-serif;
-    -webkit-font-smoothing:antialiased;
-  }
+  body{background:var(--bg);color:var(--ink);font-family:'DM Sans',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
   .wrap{max-width:480px;margin:0 auto;padding:20px 16px 96px;min-height:100%}
 
-  /* ---------- header ---------- */
   header{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:18px}
   .brand{font-family:'Playfair Display',serif;font-weight:800;font-size:1.25rem;letter-spacing:.01em}
   .brand span{color:var(--green)}
   .tagline{font-size:.6rem;letter-spacing:.22em;color:var(--ink-dim);text-transform:uppercase}
 
-  /* ---------- age gate ---------- */
-  #ageGate{
-    position:fixed;inset:0;background:var(--bg);z-index:50;
-    display:flex;flex-direction:column;align-items:center;justify-content:center;
-    text-align:center;padding:32px;
-  }
+  #ageGate{position:fixed;inset:0;background:var(--bg);z-index:50;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:32px}
   #ageGate h1{font-family:'Playfair Display',serif;font-size:1.7rem;margin-bottom:8px}
   #ageGate p{color:var(--ink-dim);font-size:.9rem;max-width:300px;margin-bottom:26px;line-height:1.5}
-  .btn{
-    display:inline-block;border:none;cursor:pointer;
-    background:var(--green);color:#fff;font-family:'DM Sans',sans-serif;
-    font-weight:700;font-size:1rem;padding:14px 30px;border-radius:12px;
-  }
+  .btn{display:inline-block;border:none;cursor:pointer;background:var(--green);color:#fff;font-family:'DM Sans',sans-serif;font-weight:700;font-size:1rem;padding:14px 30px;border-radius:12px}
   .btn.ghost{background:transparent;color:var(--ink-dim);font-weight:500;margin-top:14px;font-size:.85rem}
   .btn:focus-visible{outline:2px solid var(--green);outline-offset:3px}
+  .btn.block{width:100%;margin-top:14px}
 
-  /* ---------- tabs ---------- */
-  nav{
-    position:fixed;bottom:0;left:0;right:0;z-index:40;
-    background:var(--surface);display:flex;
-    border-top:1px solid #3a3f47;
-  }
-  nav button{
-    flex:1;background:none;border:none;color:var(--ink-dim);
-    font-family:'DM Sans',sans-serif;font-size:.8rem;font-weight:500;
-    padding:14px 0 calc(14px + env(safe-area-inset-bottom));cursor:pointer;
-  }
+  nav{position:fixed;bottom:0;left:0;right:0;z-index:40;background:var(--surface);display:flex;border-top:1px solid #3a3f47}
+  nav button{flex:1;background:none;border:none;color:var(--ink-dim);font-family:'DM Sans',sans-serif;font-size:.8rem;font-weight:500;padding:14px 0 calc(14px + env(safe-area-inset-bottom));cursor:pointer}
   nav button.active{color:var(--green);font-weight:700}
 
-  /* ---------- scanner ---------- */
-  #scanView video{
-    width:100%;aspect-ratio:3/4;object-fit:cover;
-    border-radius:var(--card-radius);background:#000;
-  }
   .scan-frame{position:relative}
-  .scan-frame::after{
-    content:"";position:absolute;inset:14%;
-    border:2px solid rgba(49,170,100,.85);border-radius:14px;
-    pointer-events:none;
-  }
-  /* camera controls overlaid on the video */
-  .scan-frame .controls{
-    position:absolute;left:0;right:0;bottom:12px;
-    display:flex;align-items:center;gap:12px;padding:0 16px;
-  }
+  #video{width:100%;aspect-ratio:3/4;object-fit:cover;border-radius:var(--card-radius);background:#000}
+  .scan-frame::after{content:"";position:absolute;inset:14%;border:2px solid rgba(49,170,100,.85);border-radius:14px;pointer-events:none}
+
+  .scan-frame .controls{position:absolute;left:0;right:0;bottom:12px;display:flex;align-items:center;gap:12px;padding:0 16px}
   .scan-frame .controls.hide{display:none}
-  .ctrl-btn{
-    flex:0 0 auto;width:46px;height:46px;border-radius:50%;
-    border:none;cursor:pointer;
-    background:rgba(0,0,0,.55);color:#fff;font-size:1.3rem;
-    display:flex;align-items:center;justify-content:center;
-    backdrop-filter:blur(4px);
-  }
+  .ctrl-btn{flex:0 0 auto;width:46px;height:46px;border-radius:50%;border:none;cursor:pointer;background:rgba(0,0,0,.55);color:#fff;font-size:1.3rem;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(4px)}
   .ctrl-btn.on{background:var(--green)}
-  .zoom-wrap{
-    flex:1;display:flex;align-items:center;gap:8px;
-    background:rgba(0,0,0,.55);border-radius:999px;padding:0 14px;height:46px;
-    backdrop-filter:blur(4px);
-  }
+  .zoom-wrap{flex:1;display:flex;align-items:center;gap:8px;background:rgba(0,0,0,.55);border-radius:999px;padding:0 14px;height:46px;backdrop-filter:blur(4px)}
   .zoom-wrap.hide{display:none}
   .zoom-wrap span{color:#fff;font-size:.75rem;flex:0 0 auto;opacity:.8}
-  .zoom-wrap input[type=range]{
-    flex:1;accent-color:var(--green);height:4px;
-  }
-  #scanHint{color:var(--ink-dim);font-size:.85rem;text-align:center;margin-top:12px;line-height:1.5}
-  #startBtn{width:100%;margin-top:14px}
-  .status{
-    margin-top:12px;text-align:center;font-size:.85rem;min-height:1.3em;color:var(--ink-dim)
-  }
-  .status.err{color:#e07a6b}
+  .zoom-wrap input[type=range]{flex:1;accent-color:var(--green);height:4px}
 
-  /* ---------- hockey card ---------- */
-  .card{
-    background:var(--surface);border-radius:var(--card-radius);
-    padding:22px 20px 18px;margin-top:18px;
-    border:1px solid #3a3f47;
-    box-shadow:0 10px 30px rgba(0,0,0,.35);
-  }
+  #scanHint{color:var(--ink-dim);font-size:.85rem;text-align:center;margin-top:12px;line-height:1.5}
+  .status{margin-top:12px;text-align:center;font-size:.85rem;min-height:1.3em;color:var(--ink-dim)}
+  .status.err{color:#e07a6b}
+  .link-btn{display:block;margin:14px auto 0;background:none;border:none;color:var(--ink-dim);font-family:'DM Sans',sans-serif;font-size:.85rem;text-decoration:underline;cursor:pointer}
+
+  /* manual entry */
+  #manualBox{background:var(--surface);border:1px solid #3a3f47;border-radius:var(--card-radius);padding:18px 16px;margin-top:16px}
+  #manualBox.hide{display:none}
+  #manualBox label{display:block;font-size:.8rem;color:var(--ink-dim);margin-bottom:8px;line-height:1.5}
+  #manualInput{width:100%;background:#1d2024;border:1px solid #3a3f47;border-radius:10px;color:var(--ink);font-family:'DM Sans',sans-serif;font-size:1.1rem;padding:12px 14px;letter-spacing:.05em}
+  #manualInput:focus{outline:2px solid var(--green);outline-offset:1px}
+
+  .card{background:var(--surface);border-radius:var(--card-radius);padding:22px 20px 18px;margin-top:18px;border:1px solid #3a3f47;box-shadow:0 10px 30px rgba(0,0,0,.35)}
   .card .cat{font-size:.62rem;letter-spacing:.2em;text-transform:uppercase;color:var(--green);font-weight:700}
   .card h2{font-family:'Playfair Display',serif;font-size:1.5rem;line-height:1.15;margin:6px 0 2px}
   .card .brandline{color:var(--ink-dim);font-size:.85rem;margin-bottom:14px}
   .pills{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
-  .pill{
-    background:#1d2024;border:1px solid #3a3f47;border-radius:999px;
-    padding:6px 13px;font-size:.78rem;font-weight:700;
-  }
+  .pill{background:#1d2024;border:1px solid #3a3f47;border-radius:999px;padding:6px 13px;font-size:.78rem;font-weight:700}
   .pill b{color:var(--green)}
   .terps{border-top:1px solid #3a3f47;padding-top:14px}
   .terps h3{font-size:.62rem;letter-spacing:.2em;text-transform:uppercase;color:var(--ink-dim);margin-bottom:10px}
   .terp{display:flex;justify-content:space-between;padding:7px 0;font-size:.95rem}
   .terp .rank{color:var(--green);font-weight:700;margin-right:10px}
-  .meta{
-    display:flex;justify-content:space-between;color:var(--ink-dim);
-    font-size:.72rem;margin-top:16px;border-top:1px solid #3a3f47;padding-top:12px;
-  }
-  .demo-tag{
-    background:#6b5b1f;color:#ffe08a;border-radius:6px;
-    font-size:.65rem;font-weight:700;padding:3px 8px;letter-spacing:.06em;
-    display:inline-block;margin-bottom:10px;
-  }
-  .notfound{
-    background:var(--surface);border:1px dashed #4a505a;border-radius:var(--card-radius);
-    padding:26px 20px;margin-top:18px;text-align:center;color:var(--ink-dim);
-    font-size:.9rem;line-height:1.6;
-  }
+  .meta{display:flex;justify-content:space-between;color:var(--ink-dim);font-size:.72rem;margin-top:16px;border-top:1px solid #3a3f47;padding-top:12px}
+  .demo-tag{background:#6b5b1f;color:#ffe08a;border-radius:6px;font-size:.65rem;font-weight:700;padding:3px 8px;letter-spacing:.06em;display:inline-block;margin-bottom:10px}
+  .notfound{background:var(--surface);border:1px dashed #4a505a;border-radius:var(--card-radius);padding:26px 20px;margin-top:18px;text-align:center;color:var(--ink-dim);font-size:.9rem;line-height:1.6}
 
-  /* ---------- collection ---------- */
   #collView .empty{color:var(--ink-dim);text-align:center;margin-top:48px;font-size:.9rem;line-height:1.7}
-  .coll-item{
-    background:var(--surface);border:1px solid #3a3f47;border-radius:14px;
-    padding:14px 16px;margin-top:12px;cursor:pointer;
-  }
+  .coll-item{background:var(--surface);border:1px solid #3a3f47;border-radius:14px;padding:14px 16px;margin-top:12px;cursor:pointer}
   .coll-item .n{font-family:'Playfair Display',serif;font-weight:700;font-size:1.05rem}
   .coll-item .d{color:var(--ink-dim);font-size:.75rem;margin-top:3px}
-
   .hide{display:none!important}
 </style>
 </head>
 <body>
 
-<!-- ============ AGE GATE ============ -->
 <div id="ageGate">
   <h1>The <span style="color:var(--green)">Terpene</span> Sommelier</h1>
   <p>Cannabis expertise · curated.<br><br>This experience contains cannabis product information. You must be 19 years of age or older to continue.</p>
@@ -169,7 +98,6 @@
     </div>
   </header>
 
-  <!-- ============ SCAN VIEW ============ -->
   <section id="scanView">
     <div class="scan-frame">
       <video id="video" playsinline muted></video>
@@ -181,13 +109,20 @@
         </div>
       </div>
     </div>
-    <button class="btn" id="startBtn">Start scanning</button>
-    <p id="scanHint">Point your camera at the square barcode on the package label.</p>
+    <button class="btn block" id="startBtn">Start scanning</button>
+    <p id="scanHint">Point your camera at the barcode on the package label.</p>
     <p class="status" id="status"></p>
+    <button class="link-btn" id="manualToggle">Can't scan? Enter the code</button>
+
+    <div id="manualBox" class="hide">
+      <label>Type the number after <b style="color:var(--ink)">(01)</b> under the barcode — usually 12–14 digits.</label>
+      <input id="manualInput" type="text" inputmode="numeric" placeholder="e.g. 628518000802" autocomplete="off">
+      <button class="btn block" id="manualGo">Find product</button>
+    </div>
+
     <div id="cardHolder"></div>
   </section>
 
-  <!-- ============ COLLECTION VIEW ============ -->
   <section id="collView" class="hide">
     <div id="collList"></div>
     <p class="empty hide" id="collEmpty">Nothing here yet.<br>Scan a product to start your collection.</p>
@@ -199,319 +134,192 @@
   <button id="tabColl">My Products</button>
 </nav>
 
-<script>
+<script type="module">
 /* =====================================================================
-   CONFIG
-   ---------------------------------------------------------------------
-   API_BASE: set to your Railway service URL when the /card endpoint is
-   live, e.g. "https://your-service.up.railway.app". While it is empty,
-   the page runs in DEMO mode using the mock products below.
+   The Terpene Sommelier — consumer scanner
+   Decoder: zxing-wasm (C++ ZXing via WebAssembly) — reads DataMatrix,
+   GS1 DataBar Expanded + Expanded Stacked, UPC-A, EAN-13, Code128,
+   PDF417, all auto-detected. Native BarcodeDetector is used only as a
+   fast path for DataMatrix where available; everything else -> WASM.
 ===================================================================== */
+import { readBarcodes, prepareZXingModule } from "https://cdn.jsdelivr.net/npm/zxing-wasm@2.1.0/dist/reader/index.js";
+
+/* Warm up the wasm binary early so the first scan isn't slow. */
+prepareZXingModule({ fireImmediately: true }).catch(()=>{});
+
+const READER_OPTS = {
+  tryHarder: true,
+  formats: [
+    "DataMatrix","DataBar","DataBarExpanded",
+    "QRCode","UPC-A","EAN-13","EAN-8","UPC-E","Code128","Code39","PDF417"
+  ],
+  maxNumberOfSymbols: 1
+};
+
 const API_BASE = "";
-
 const DEMO_PRODUCTS = {
-  // Greentone package from the test label (GTIN 800129905886)
-  "800129905886": {
-    name: "Demo Product — Greentone",
-    brand: "Greentone Enterprises",
-    category: "Dried Flower",
-    thc: "THC 20–26%",
-    cbd: "CBD <1%",
-    terpenes: ["Beta-Myrcene", "Beta-Caryophyllene", "Limonene"],
-    leaning: "Indica leaning"
-  }
+  "800129905886": { name:"Demo Product — Greentone", brand:"Greentone Enterprises", category:"Dried Flower", thc:"THC 20–26%", cbd:"CBD <1%", terpenes:["Beta-Myrcene","Beta-Caryophyllene","Limonene"], leaning:"Indica leaning" },
+  "628518000802": { name:"Demo Product — MTL", brand:"MTL Cannabis", category:"Dried Flower", thc:"THC 22–28%", cbd:"CBD <1%", terpenes:["Limonene","Beta-Caryophyllene","Linalool"], leaning:"Sativa leaning" }
 };
 
-/* ============ AGE GATE ============ */
-const gate = document.getElementById("ageGate");
-if (localStorage.getItem("ts_age_ok") === "1") gate.classList.add("hide");
-document.getElementById("ageYes").onclick = () => {
-  localStorage.setItem("ts_age_ok", "1");
-  gate.classList.add("hide");
-};
-document.getElementById("ageNo").onclick = () => {
-  gate.innerHTML = "<p style='color:var(--ink-dim)'>This experience is only available to adults 19+.</p>";
-};
+/* ---------- age gate ---------- */
+const gate=document.getElementById("ageGate");
+if(localStorage.getItem("ts_age_ok")==="1")gate.classList.add("hide");
+document.getElementById("ageYes").onclick=()=>{localStorage.setItem("ts_age_ok","1");gate.classList.add("hide")};
+document.getElementById("ageNo").onclick=()=>{gate.innerHTML="<p style='color:var(--ink-dim)'>This experience is only available to adults 19+.</p>"};
 
-/* ============ TABS ============ */
-const scanView = document.getElementById("scanView");
-const collView = document.getElementById("collView");
-const tabScan = document.getElementById("tabScan");
-const tabColl = document.getElementById("tabColl");
-tabScan.onclick = () => { scanView.classList.remove("hide"); collView.classList.add("hide"); tabScan.classList.add("active"); tabColl.classList.remove("active"); };
-tabColl.onclick = () => { collView.classList.remove("hide"); scanView.classList.add("hide"); tabColl.classList.add("active"); tabScan.classList.remove("active"); renderCollection(); };
+/* ---------- tabs ---------- */
+const scanView=document.getElementById("scanView"),collView=document.getElementById("collView");
+const tabScan=document.getElementById("tabScan"),tabColl=document.getElementById("tabColl");
+tabScan.onclick=()=>{scanView.classList.remove("hide");collView.classList.add("hide");tabScan.classList.add("active");tabColl.classList.remove("active")};
+tabColl.onclick=()=>{collView.classList.remove("hide");scanView.classList.add("hide");tabColl.classList.add("active");tabScan.classList.remove("active");renderCollection()};
 
-/* =====================================================================
-   GS1 PARSING
-   ---------------------------------------------------------------------
-   Cannabis packages carry a GS1 DataMatrix whose payload concatenates
-   Application Identifiers, e.g.:
-     (01)00800129905886 (13)260522 (10)GG1H0511
-   Raw scans arrive with or without parentheses and with an ASCII GS
-   (\u001d) separating variable-length fields.
-   We extract:  (01) GTIN-14 → normalized (leading zeros stripped)
-                (10) lot     → shown on the card
-                (13) pack date YYMMDD → shown on the card
-   Plain UPC-A / EAN-13 scans are just digits; those normalize directly.
-===================================================================== */
-function parseScan(raw) {
-  const out = { gtin: null, lot: null, packaged: null };
-  let s = raw.replace(/[()]/g, "");
-  // Pure linear barcode (UPC-A/EAN-13/GTIN digits only)
-  if (/^\d{8,14}$/.test(s)) { out.gtin = s.replace(/^0+/, ""); return out; }
-  // GS1 element string
-  const gs = "\u001d";
-  let i = 0;
-  while (i < s.length - 1) {
-    const ai = s.slice(i, i + 2);
-    if (ai === "01") { out.gtin = s.slice(i + 2, i + 16).replace(/^0+/, ""); i += 16; }
-    else if (ai === "13" || ai === "11" || ai === "15" || ai === "17") {
-      const key = ai === "13" ? "packaged" : null;
-      const val = s.slice(i + 2, i + 8);
-      if (key) out.packaged = "20" + val.slice(0,2) + "-" + val.slice(2,4) + "-" + val.slice(4,6);
-      i += 8;
+/* ---------- GS1 parse ---------- */
+function parseScan(raw){
+  const out={gtin:null,lot:null,packaged:null};
+  let s=String(raw).replace(/[()]/g,"");
+  if(/^\d{8,14}$/.test(s)){out.gtin=s.replace(/^0+/,"");return out;}
+  const gs="\u001d";let i=0;
+  while(i<s.length-1){
+    const ai=s.slice(i,i+2);
+    if(ai==="01"){out.gtin=s.slice(i+2,i+16).replace(/^0+/,"");i+=16;}
+    else if(ai==="13"||ai==="11"||ai==="15"||ai==="17"){
+      if(ai==="13"){const v=s.slice(i+2,i+8);out.packaged="20"+v.slice(0,2)+"-"+v.slice(2,4)+"-"+v.slice(4,6);}
+      i+=8;
     }
-    else if (ai === "10" || ai === "21") {
-      let end = s.indexOf(gs, i + 2);
-      if (end === -1) end = s.length;
-      if (ai === "10") out.lot = s.slice(i + 2, end);
-      i = end + 1;
-    }
-    else { i += 1; } // unknown AI: advance and keep looking for 01
+    else if(ai==="10"||ai==="21"){let end=s.indexOf(gs,i+2);if(end===-1)end=s.length;if(ai==="10")out.lot=s.slice(i+2,end);i=end+1;}
+    else{i+=1;}
   }
   return out;
 }
 
-/* ============ PRODUCT LOOKUP ============ */
-async function lookup(gtin) {
-  if (!API_BASE) {
-    return DEMO_PRODUCTS[gtin] ? { demo: true, ...DEMO_PRODUCTS[gtin] } : null;
-  }
-  try {
-    const r = await fetch(API_BASE + "/card?code=" + encodeURIComponent(gtin));
-    if (!r.ok) return null;
-    return await r.json();
-  } catch { return null; }
+/* ---------- lookup ---------- */
+async function lookup(gtin){
+  if(!API_BASE)return DEMO_PRODUCTS[gtin]?{demo:true,...DEMO_PRODUCTS[gtin]}:null;
+  try{const r=await fetch(API_BASE+"/card?code="+encodeURIComponent(gtin));if(!r.ok)return null;return await r.json();}catch{return null;}
 }
 
-/* ============ CARD RENDER ============ */
-const cardHolder = document.getElementById("cardHolder");
-function renderCard(p, scan) {
-  if (!p) {
-    cardHolder.innerHTML =
-      "<div class='notfound'>We couldn't find that product.<br>" +
-      "Code read: <b style='color:var(--ink)'>" + (scan.gtin || "—") + "</b><br>" +
-      "Try re-scanning the square barcode on the label.</div>";
-    return;
-  }
-  const terps = (p.terpenes || []).map((t, i) =>
-    "<div class='terp'><span><span class='rank'>" + (i + 1) + "</span>" + t + "</span></div>").join("");
-  cardHolder.innerHTML =
-    "<div class='card'>" +
-      (p.demo ? "<span class='demo-tag'>DEMO DATA</span>" : "") +
-      "<div class='cat'>" + (p.category || "") + (p.leaning ? " · " + p.leaning : "") + "</div>" +
-      "<h2>" + p.name + "</h2>" +
-      "<div class='brandline'>" + (p.brand || "") + "</div>" +
-      "<div class='pills'>" +
-        (p.thc ? "<span class='pill'><b>" + p.thc + "</b></span>" : "") +
-        (p.cbd ? "<span class='pill'>" + p.cbd + "</span>" : "") +
-      "</div>" +
-      "<div class='terps'><h3>Terpene Profile</h3>" + terps + "</div>" +
-      "<div class='meta'>" +
-        "<span>" + (scan.packaged ? "Packaged " + scan.packaged : "") + "</span>" +
-        "<span>" + (scan.lot ? "Lot " + scan.lot : "") + "</span>" +
-      "</div>" +
-    "</div>";
+/* ---------- card render ---------- */
+const cardHolder=document.getElementById("cardHolder");
+function renderCard(p,scan){
+  if(!p){cardHolder.innerHTML="<div class='notfound'>We couldn't find that product.<br>Code read: <b style='color:var(--ink)'>"+(scan.gtin||"—")+"</b><br>Try re-scanning, or enter the code manually.</div>";return;}
+  const terps=(p.terpenes||[]).map((t,i)=>"<div class='terp'><span><span class='rank'>"+(i+1)+"</span>"+t+"</span></div>").join("");
+  cardHolder.innerHTML="<div class='card'>"+(p.demo?"<span class='demo-tag'>DEMO DATA</span>":"")+
+    "<div class='cat'>"+(p.category||"")+(p.leaning?" · "+p.leaning:"")+"</div>"+
+    "<h2>"+p.name+"</h2><div class='brandline'>"+(p.brand||"")+"</div>"+
+    "<div class='pills'>"+(p.thc?"<span class='pill'><b>"+p.thc+"</b></span>":"")+(p.cbd?"<span class='pill'>"+p.cbd+"</span>":"")+"</div>"+
+    "<div class='terps'><h3>Terpene Profile</h3>"+terps+"</div>"+
+    "<div class='meta'><span>"+(scan.packaged?"Packaged "+scan.packaged:"")+"</span><span>"+(scan.lot?"Lot "+scan.lot:"")+"</span></div></div>";
 }
 
-/* ============ COLLECTION (localStorage) ============ */
-function saveToCollection(p, scan) {
-  if (!p) return;
-  const coll = JSON.parse(localStorage.getItem("ts_collection") || "{}");
-  coll[scan.gtin] = { p, scan, when: new Date().toISOString().slice(0, 10) };
-  localStorage.setItem("ts_collection", JSON.stringify(coll));
-}
-function renderCollection() {
-  const coll = JSON.parse(localStorage.getItem("ts_collection") || "{}");
-  const keys = Object.keys(coll);
-  const list = document.getElementById("collList");
-  const empty = document.getElementById("collEmpty");
-  list.innerHTML = "";
-  empty.classList.toggle("hide", keys.length > 0);
-  keys.reverse().forEach(k => {
-    const e = coll[k];
-    const div = document.createElement("div");
-    div.className = "coll-item";
-    div.innerHTML = "<div class='n'>" + e.p.name + "</div><div class='d'>Scanned " + e.when +
-      (e.scan.lot ? " · Lot " + e.scan.lot : "") + "</div>";
-    div.onclick = () => { tabScan.click(); renderCard(e.p, e.scan); window.scrollTo(0, 0); };
-    list.appendChild(div);
-  });
+/* ---------- collection ---------- */
+function saveToCollection(p,scan){if(!p)return;const c=JSON.parse(localStorage.getItem("ts_collection")||"{}");c[scan.gtin]={p,scan,when:new Date().toISOString().slice(0,10)};localStorage.setItem("ts_collection",JSON.stringify(c));}
+function renderCollection(){
+  const c=JSON.parse(localStorage.getItem("ts_collection")||"{}"),keys=Object.keys(c);
+  const list=document.getElementById("collList"),empty=document.getElementById("collEmpty");
+  list.innerHTML="";empty.classList.toggle("hide",keys.length>0);
+  keys.reverse().forEach(k=>{const e=c[k];const d=document.createElement("div");d.className="coll-item";
+    d.innerHTML="<div class='n'>"+e.p.name+"</div><div class='d'>Scanned "+e.when+(e.scan.lot?" · Lot "+e.scan.lot:"")+"</div>";
+    d.onclick=()=>{tabScan.click();renderCard(e.p,e.scan);window.scrollTo(0,0)};list.appendChild(d);});
 }
 
-/* =====================================================================
-   SCANNER
-   ---------------------------------------------------------------------
-   Strategy: native BarcodeDetector when it supports data_matrix
-   (Chrome / Android). Otherwise fall back to ZXing, which decodes
-   DataMatrix, UPC-A and EAN-13 in-browser everywhere else (iOS Safari).
-===================================================================== */
-const video = document.getElementById("video");
-const statusEl = document.getElementById("status");
-const startBtn = document.getElementById("startBtn");
-let running = false;
-
-function setStatus(msg, err) {
-  statusEl.textContent = msg;
-  statusEl.classList.toggle("err", !!err);
-}
-
-async function onScan(rawText) {
-  if (!running) return;
-  running = false;               // pause on hit
-  stopStreams();
-  const scan = parseScan(rawText);
-  if (!scan.gtin) { setStatus("Barcode read, but no product code found. Try again.", true); startBtn.classList.remove("hide"); return; }
-  setStatus("Looking up " + scan.gtin + "…");
-  const p = await lookup(scan.gtin);
-  renderCard(p, scan);
-  saveToCollection(p, scan);
-  setStatus(p ? "" : "", false);
-  startBtn.textContent = "Scan another";
-  startBtn.classList.remove("hide");
-}
-
-let zxingReader = null;
-let nativeTimer = null;
-let currentTrack = null;
-
-const controls = document.getElementById("controls");
-const torchBtn = document.getElementById("torchBtn");
-const zoomWrap = document.getElementById("zoomWrap");
-const zoomRange = document.getElementById("zoomRange");
-
-function stopStreams() {
-  if (nativeTimer) { clearInterval(nativeTimer); nativeTimer = null; }
-  if (zxingReader) { try { zxingReader.reset(); } catch {} }
-  const s = video.srcObject;
-  if (s) { s.getTracks().forEach(t => t.stop()); video.srcObject = null; }
-  currentTrack = null;
-  controls.classList.add("hide");
-  torchBtn.classList.remove("on");
-}
-
-/* Prefer high resolution + continuous autofocus: the single biggest
-   improvement for small/dense DataMatrix codes. */
-function videoConstraints() {
-  return {
-    facingMode: { ideal: "environment" },
-    width:  { ideal: 1920 },
-    height: { ideal: 1080 },
-    focusMode: "continuous",
-    advanced: [{ focusMode: "continuous" }]
-  };
-}
-
-/* After a stream starts, expose torch + zoom if the phone's camera
-   track supports them. Degrades silently where unsupported (e.g. iOS). */
-function wireControls(stream) {
-  currentTrack = stream.getVideoTracks()[0];
-  if (!currentTrack) return;
-  const caps = currentTrack.getCapabilities ? currentTrack.getCapabilities() : {};
-
-  // nudge continuous focus once more (some phones need it post-start)
-  try { if (caps.focusMode && caps.focusMode.includes("continuous"))
-        currentTrack.applyConstraints({ advanced: [{ focusMode: "continuous" }] }); } catch {}
-
-  controls.classList.remove("hide");
-
-  // Torch
-  if (caps.torch) {
-    torchBtn.style.display = "flex";
-    torchBtn.onclick = async () => {
-      const on = !torchBtn.classList.contains("on");
-      try { await currentTrack.applyConstraints({ advanced: [{ torch: on }] });
-            torchBtn.classList.toggle("on", on); } catch {}
-    };
-  } else { torchBtn.style.display = "none"; }
-
-  // Zoom
-  if (caps.zoom && caps.zoom.max > caps.zoom.min) {
-    zoomWrap.classList.remove("hide");
-    zoomRange.min = caps.zoom.min;
-    zoomRange.max = caps.zoom.max;
-    zoomRange.step = caps.zoom.step || 0.1;
-    zoomRange.value = currentTrack.getSettings().zoom || caps.zoom.min;
-    zoomRange.oninput = () => {
-      try { currentTrack.applyConstraints({ advanced: [{ zoom: parseFloat(zoomRange.value) }] }); } catch {}
-    };
-  } else { zoomWrap.classList.add("hide"); }
-}
-
-/* Tap the video to focus that point (single-shot), where supported. */
-video.addEventListener("click", async () => {
-  if (!currentTrack) return;
-  const caps = currentTrack.getCapabilities ? currentTrack.getCapabilities() : {};
-  if (caps.focusMode && caps.focusMode.includes("single-shot")) {
-    try {
-      await currentTrack.applyConstraints({ advanced: [{ focusMode: "single-shot" }] });
-      setTimeout(() => { try { currentTrack.applyConstraints({ advanced: [{ focusMode: "continuous" }] }); } catch {} }, 1200);
-    } catch {}
-  }
-});
-
-async function startNative() {
-  const supported = await window.BarcodeDetector.getSupportedFormats();
-  if (!supported.includes("data_matrix")) return false;
-  const detector = new BarcodeDetector({ formats: ["data_matrix", "upc_a", "ean_13", "code_128"] });
-  const stream = await navigator.mediaDevices.getUserMedia({ video: videoConstraints() });
-  video.srcObject = stream; await video.play();
-  wireControls(stream);
-  nativeTimer = setInterval(async () => {
-    if (!running) return;
-    try {
-      const codes = await detector.detect(video);
-      if (codes.length) onScan(codes[0].rawValue);
-    } catch {}
-  }, 250);
+/* ---------- shared result handler ---------- */
+const statusEl=document.getElementById("status"),startBtn=document.getElementById("startBtn");
+function setStatus(m,err){statusEl.textContent=m;statusEl.classList.toggle("err",!!err);}
+async function handleCode(rawText){
+  const scan=parseScan(rawText);
+  if(!scan.gtin){setStatus("Read a code but found no product number. Try again or enter it manually.",true);return false;}
+  setStatus("Looking up "+scan.gtin+"…");
+  const p=await lookup(scan.gtin);
+  renderCard(p,scan);saveToCollection(p,scan);
+  setStatus("",false);
   return true;
 }
 
-async function startZXing() {
-  const hints = new Map();
-  hints.set(ZXing.DecodeHintType.POSSIBLE_FORMATS, [
-    ZXing.BarcodeFormat.DATA_MATRIX,
-    ZXing.BarcodeFormat.UPC_A,
-    ZXing.BarcodeFormat.EAN_13,
-    ZXing.BarcodeFormat.CODE_128
-  ]);
-  hints.set(ZXing.DecodeHintType.TRY_HARDER, true);
-  zxingReader = new ZXing.BrowserMultiFormatReader(hints);
-  // request the environment camera at high res, then let ZXing decode the element
-  const stream = await navigator.mediaDevices.getUserMedia({ video: videoConstraints() });
-  video.srcObject = stream; await video.play();
-  wireControls(stream);
-  zxingReader.decodeFromVideoElement(video, (result) => {
-    if (result && running) onScan(result.getText());
-  });
+/* ---------- camera + wasm scanning ---------- */
+const video=document.getElementById("video");
+const controls=document.getElementById("controls"),torchBtn=document.getElementById("torchBtn");
+const zoomWrap=document.getElementById("zoomWrap"),zoomRange=document.getElementById("zoomRange");
+let running=false,rafId=null,currentTrack=null,lastDecode=0,canvas=null,ctx=null;
+
+function videoConstraints(hi){
+  const c={facingMode:{ideal:"environment"}};
+  if(hi){c.width={ideal:1920};c.height={ideal:1080};c.advanced=[{focusMode:"continuous"}];}
+  return c;
+}
+function stopStreams(){
+  running=false;
+  if(rafId){cancelAnimationFrame(rafId);rafId=null;}
+  const s=video.srcObject;if(s){s.getTracks().forEach(t=>t.stop());video.srcObject=null;}
+  currentTrack=null;controls.classList.add("hide");torchBtn.classList.remove("on");
+}
+function wireControls(stream){
+  currentTrack=stream.getVideoTracks()[0];if(!currentTrack)return;
+  const caps=currentTrack.getCapabilities?currentTrack.getCapabilities():{};
+  try{if(caps.focusMode&&caps.focusMode.includes("continuous"))currentTrack.applyConstraints({advanced:[{focusMode:"continuous"}]});}catch{}
+  controls.classList.remove("hide");
+  if(caps.torch){torchBtn.style.display="flex";torchBtn.onclick=async()=>{const on=!torchBtn.classList.contains("on");try{await currentTrack.applyConstraints({advanced:[{torch:on}]});torchBtn.classList.toggle("on",on);}catch{}};}
+  else{torchBtn.style.display="none";}
+  if(caps.zoom&&caps.zoom.max>caps.zoom.min){zoomWrap.classList.remove("hide");zoomRange.min=caps.zoom.min;zoomRange.max=caps.zoom.max;zoomRange.step=caps.zoom.step||0.1;zoomRange.value=currentTrack.getSettings().zoom||caps.zoom.min;zoomRange.oninput=()=>{try{currentTrack.applyConstraints({advanced:[{zoom:parseFloat(zoomRange.value)}]});}catch{}};}
+  else{zoomWrap.classList.add("hide");}
+}
+video.addEventListener("click",async()=>{
+  if(!currentTrack)return;const caps=currentTrack.getCapabilities?currentTrack.getCapabilities():{};
+  if(caps.focusMode&&caps.focusMode.includes("single-shot")){try{await currentTrack.applyConstraints({advanced:[{focusMode:"single-shot"}]});setTimeout(()=>{try{currentTrack.applyConstraints({advanced:[{focusMode:"continuous"}]});}catch{}},1200);}catch{}}
+});
+
+async function getStream(){
+  try{return await navigator.mediaDevices.getUserMedia({video:videoConstraints(true)});}
+  catch(e){return await navigator.mediaDevices.getUserMedia({video:videoConstraints(false)});}
 }
 
-startBtn.onclick = async () => {
-  startBtn.classList.add("hide");
-  cardHolder.innerHTML = "";
+async function scanLoop(){
+  if(!running)return;
+  const now=performance.now();
+  if(now-lastDecode>200 && video.readyState>=2 && video.videoWidth){
+    lastDecode=now;
+    if(!canvas){canvas=document.createElement("canvas");ctx=canvas.getContext("2d",{willReadFrequently:true});}
+    canvas.width=video.videoWidth;canvas.height=video.videoHeight;
+    ctx.drawImage(video,0,0,canvas.width,canvas.height);
+    try{
+      const img=ctx.getImageData(0,0,canvas.width,canvas.height);
+      const results=await readBarcodes(img,READER_OPTS);
+      if(results&&results.length){
+        const text=results[0].text;
+        if(text){running=false;stopStreams();const ok=await handleCode(text);startBtn.textContent="Scan another";startBtn.classList.remove("hide");return;}
+      }
+    }catch(e){/* keep looping */}
+  }
+  rafId=requestAnimationFrame(scanLoop);
+}
+
+startBtn.onclick=async()=>{
+  startBtn.classList.add("hide");cardHolder.innerHTML="";document.getElementById("manualBox").classList.add("hide");
   setStatus("Starting camera…");
-  running = true;
-  try {
-    let ok = false;
-    if ("BarcodeDetector" in window) { try { ok = await startNative(); } catch { ok = false; } }
-    if (!ok) await startZXing();
-    setStatus("Scanning — hold the code inside the frame. Use zoom or the flashlight for small labels.");
-  } catch (e) {
-    running = false;
-    setStatus("Camera unavailable. Check permissions and use HTTPS.", true);
+  try{
+    const stream=await getStream();
+    video.srcObject=stream;await video.play();
+    wireControls(stream);
+    running=true;lastDecode=0;
+    setStatus("Scanning — hold the barcode inside the frame. Use zoom or the flashlight for small labels.");
+    scanLoop();
+  }catch(e){
+    setStatus("Camera unavailable ("+(e&&e.name?e.name:"error")+"). Check permissions and use HTTPS — or enter the code manually.",true);
     startBtn.classList.remove("hide");
   }
 };
+
+/* ---------- manual entry ---------- */
+const manualToggle=document.getElementById("manualToggle"),manualBox=document.getElementById("manualBox");
+const manualInput=document.getElementById("manualInput"),manualGo=document.getElementById("manualGo");
+manualToggle.onclick=()=>{manualBox.classList.toggle("hide");if(!manualBox.classList.contains("hide"))manualInput.focus();};
+manualGo.onclick=async()=>{
+  const v=(manualInput.value||"").replace(/\D/g,"");
+  if(v.length<8){setStatus("Enter at least 8 digits from under the barcode.",true);return;}
+  stopStreams();startBtn.textContent="Scan another";startBtn.classList.remove("hide");
+  await handleCode(v);manualBox.classList.add("hide");manualInput.value="";
+};
+manualInput.addEventListener("keydown",e=>{if(e.key==="Enter")manualGo.click();});
 </script>
 </body>
 </html>
