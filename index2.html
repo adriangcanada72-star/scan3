@@ -8,57 +8,44 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
-  :root{
-    --green:#31AA64; --surface:#2D3139; --bg:#16181A;
-    --ink:#F2F3F4; --ink-dim:#9AA0A6; --card-radius:18px;
-  }
+  :root{--green:#31AA64;--surface:#2D3139;--bg:#16181A;--ink:#F2F3F4;--ink-dim:#9AA0A6;--card-radius:18px}
   *{box-sizing:border-box;margin:0;padding:0}
   html,body{height:100%}
   body{background:var(--bg);color:var(--ink);font-family:'DM Sans',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
   .wrap{max-width:480px;margin:0 auto;padding:20px 16px 96px;min-height:100%}
-
   header{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:18px}
   .brand{font-family:'Playfair Display',serif;font-weight:800;font-size:1.25rem;letter-spacing:.01em}
   .brand span{color:var(--green)}
   .tagline{font-size:.6rem;letter-spacing:.22em;color:var(--ink-dim);text-transform:uppercase}
-
   #ageGate{position:fixed;inset:0;background:var(--bg);z-index:50;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:32px}
   #ageGate h1{font-family:'Playfair Display',serif;font-size:1.7rem;margin-bottom:8px}
   #ageGate p{color:var(--ink-dim);font-size:.9rem;max-width:300px;margin-bottom:26px;line-height:1.5}
   .btn{display:inline-block;border:none;cursor:pointer;background:var(--green);color:#fff;font-family:'DM Sans',sans-serif;font-weight:700;font-size:1rem;padding:14px 30px;border-radius:12px}
   .btn.ghost{background:transparent;color:var(--ink-dim);font-weight:500;margin-top:14px;font-size:.85rem}
-  .btn:focus-visible{outline:2px solid var(--green);outline-offset:3px}
   .btn.block{width:100%;margin-top:14px}
-
   nav{position:fixed;bottom:0;left:0;right:0;z-index:40;background:var(--surface);display:flex;border-top:1px solid #3a3f47}
   nav button{flex:1;background:none;border:none;color:var(--ink-dim);font-family:'DM Sans',sans-serif;font-size:.8rem;font-weight:500;padding:14px 0 calc(14px + env(safe-area-inset-bottom));cursor:pointer}
   nav button.active{color:var(--green);font-weight:700}
-
   .scan-frame{position:relative}
   #video{width:100%;aspect-ratio:3/4;object-fit:cover;border-radius:var(--card-radius);background:#000}
   .scan-frame::after{content:"";position:absolute;inset:14%;border:2px solid rgba(49,170,100,.85);border-radius:14px;pointer-events:none}
-
   .scan-frame .controls{position:absolute;left:0;right:0;bottom:12px;display:flex;align-items:center;gap:12px;padding:0 16px}
   .scan-frame .controls.hide{display:none}
-  .ctrl-btn{flex:0 0 auto;width:46px;height:46px;border-radius:50%;border:none;cursor:pointer;background:rgba(0,0,0,.55);color:#fff;font-size:1.3rem;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(4px)}
+  .ctrl-btn{flex:0 0 auto;width:46px;height:46px;border-radius:50%;border:none;cursor:pointer;background:rgba(0,0,0,.55);color:#fff;font-size:1.3rem;display:flex;align-items:center;justify-content:center}
   .ctrl-btn.on{background:var(--green)}
-  .zoom-wrap{flex:1;display:flex;align-items:center;gap:8px;background:rgba(0,0,0,.55);border-radius:999px;padding:0 14px;height:46px;backdrop-filter:blur(4px)}
+  .zoom-wrap{flex:1;display:flex;align-items:center;gap:8px;background:rgba(0,0,0,.55);border-radius:999px;padding:0 14px;height:46px}
   .zoom-wrap.hide{display:none}
   .zoom-wrap span{color:#fff;font-size:.75rem;flex:0 0 auto;opacity:.8}
   .zoom-wrap input[type=range]{flex:1;accent-color:var(--green);height:4px}
-
   #scanHint{color:var(--ink-dim);font-size:.85rem;text-align:center;margin-top:12px;line-height:1.5}
   .status{margin-top:12px;text-align:center;font-size:.85rem;min-height:1.3em;color:var(--ink-dim)}
   .status.err{color:#e07a6b}
   .link-btn{display:block;margin:14px auto 0;background:none;border:none;color:var(--ink-dim);font-family:'DM Sans',sans-serif;font-size:.85rem;text-decoration:underline;cursor:pointer}
-
-  /* manual entry */
   #manualBox{background:var(--surface);border:1px solid #3a3f47;border-radius:var(--card-radius);padding:18px 16px;margin-top:16px}
   #manualBox.hide{display:none}
   #manualBox label{display:block;font-size:.8rem;color:var(--ink-dim);margin-bottom:8px;line-height:1.5}
   #manualInput{width:100%;background:#1d2024;border:1px solid #3a3f47;border-radius:10px;color:var(--ink);font-family:'DM Sans',sans-serif;font-size:1.1rem;padding:12px 14px;letter-spacing:.05em}
   #manualInput:focus{outline:2px solid var(--green);outline-offset:1px}
-
   .card{background:var(--surface);border-radius:var(--card-radius);padding:22px 20px 18px;margin-top:18px;border:1px solid #3a3f47;box-shadow:0 10px 30px rgba(0,0,0,.35)}
   .card .cat{font-size:.62rem;letter-spacing:.2em;text-transform:uppercase;color:var(--green);font-weight:700}
   .card h2{font-family:'Playfair Display',serif;font-size:1.5rem;line-height:1.15;margin:6px 0 2px}
@@ -73,7 +60,6 @@
   .meta{display:flex;justify-content:space-between;color:var(--ink-dim);font-size:.72rem;margin-top:16px;border-top:1px solid #3a3f47;padding-top:12px}
   .demo-tag{background:#6b5b1f;color:#ffe08a;border-radius:6px;font-size:.65rem;font-weight:700;padding:3px 8px;letter-spacing:.06em;display:inline-block;margin-bottom:10px}
   .notfound{background:var(--surface);border:1px dashed #4a505a;border-radius:var(--card-radius);padding:26px 20px;margin-top:18px;text-align:center;color:var(--ink-dim);font-size:.9rem;line-height:1.6}
-
   #collView .empty{color:var(--ink-dim);text-align:center;margin-top:48px;font-size:.9rem;line-height:1.7}
   .coll-item{background:var(--surface);border:1px solid #3a3f47;border-radius:14px;padding:14px 16px;margin-top:12px;cursor:pointer}
   .coll-item .n{font-family:'Playfair Display',serif;font-weight:700;font-size:1.05rem}
@@ -103,23 +89,18 @@
       <video id="video" playsinline muted></video>
       <div class="controls hide" id="controls">
         <button class="ctrl-btn" id="torchBtn" aria-label="Toggle flashlight">🔦</button>
-        <div class="zoom-wrap hide" id="zoomWrap">
-          <span>Zoom</span>
-          <input type="range" id="zoomRange" min="1" max="1" step="0.1" value="1" aria-label="Zoom">
-        </div>
+        <div class="zoom-wrap hide" id="zoomWrap"><span>Zoom</span><input type="range" id="zoomRange" min="1" max="1" step="0.1" value="1" aria-label="Zoom"></div>
       </div>
     </div>
     <button class="btn block" id="startBtn">Start scanning</button>
     <p id="scanHint">Point your camera at the barcode on the package label.</p>
     <p class="status" id="status"></p>
     <button class="link-btn" id="manualToggle">Can't scan? Enter the code</button>
-
     <div id="manualBox" class="hide">
-      <label>Type the number after <b style="color:var(--ink)">(01)</b> under the barcode — usually 12–14 digits.</label>
+      <label>Type the number under the barcode (the digits after <b style="color:var(--ink)">(01)</b>, usually 12–14 digits).</label>
       <input id="manualInput" type="text" inputmode="numeric" placeholder="e.g. 628518000802" autocomplete="off">
       <button class="btn block" id="manualGo">Find product</button>
     </div>
-
     <div id="cardHolder"></div>
   </section>
 
@@ -134,192 +115,199 @@
   <button id="tabColl">My Products</button>
 </nav>
 
-<script type="module">
-/* =====================================================================
-   The Terpene Sommelier — consumer scanner
-   Decoder: zxing-wasm (C++ ZXing via WebAssembly) — reads DataMatrix,
-   GS1 DataBar Expanded + Expanded Stacked, UPC-A, EAN-13, Code128,
-   PDF417, all auto-detected. Native BarcodeDetector is used only as a
-   fast path for DataMatrix where available; everything else -> WASM.
-===================================================================== */
-import { readBarcodes, prepareZXingModule } from "https://cdn.jsdelivr.net/npm/zxing-wasm@2.1.0/dist/reader/index.js";
+<!-- ============================================================
+     SCRIPT 1 — CORE (plain script, always runs).
+     Age gate, tabs, GS1 parse, lookup, card render, collection,
+     and MANUAL ENTRY all live here. Nothing in this block imports
+     anything, so it can never be blocked by the scanner engine.
+============================================================= -->
+<script>
+(function(){
+  "use strict";
 
-/* Warm up the wasm binary early so the first scan isn't slow. */
-prepareZXingModule({ fireImmediately: true }).catch(()=>{});
+  /* ----- age gate ----- */
+  var gate=document.getElementById("ageGate");
+  if(localStorage.getItem("ts_age_ok")==="1")gate.classList.add("hide");
+  document.getElementById("ageYes").addEventListener("click",function(){
+    localStorage.setItem("ts_age_ok","1");gate.classList.add("hide");
+  });
+  document.getElementById("ageNo").addEventListener("click",function(){
+    gate.innerHTML="<p style='color:var(--ink-dim)'>This experience is only available to adults 19+.</p>";
+  });
 
-const READER_OPTS = {
-  tryHarder: true,
-  formats: [
-    "DataMatrix","DataBar","DataBarExpanded",
-    "QRCode","UPC-A","EAN-13","EAN-8","UPC-E","Code128","Code39","PDF417"
-  ],
-  maxNumberOfSymbols: 1
-};
+  /* ----- tabs ----- */
+  var scanView=document.getElementById("scanView"),collView=document.getElementById("collView");
+  var tabScan=document.getElementById("tabScan"),tabColl=document.getElementById("tabColl");
+  tabScan.addEventListener("click",function(){scanView.classList.remove("hide");collView.classList.add("hide");tabScan.classList.add("active");tabColl.classList.remove("active");});
+  tabColl.addEventListener("click",function(){collView.classList.remove("hide");scanView.classList.add("hide");tabColl.classList.add("active");tabScan.classList.remove("active");renderCollection();});
 
-const API_BASE = "";
-const DEMO_PRODUCTS = {
-  "800129905886": { name:"Demo Product — Greentone", brand:"Greentone Enterprises", category:"Dried Flower", thc:"THC 20–26%", cbd:"CBD <1%", terpenes:["Beta-Myrcene","Beta-Caryophyllene","Limonene"], leaning:"Indica leaning" },
-  "628518000802": { name:"Demo Product — MTL", brand:"MTL Cannabis", category:"Dried Flower", thc:"THC 22–28%", cbd:"CBD <1%", terpenes:["Limonene","Beta-Caryophyllene","Linalool"], leaning:"Sativa leaning" }
-};
+  /* ----- config / demo ----- */
+  var API_BASE="";
+  var DEMO_PRODUCTS={
+    "800129905886":{name:"Demo Product — Greentone",brand:"Greentone Enterprises",category:"Dried Flower",thc:"THC 20–26%",cbd:"CBD <1%",terpenes:["Beta-Myrcene","Beta-Caryophyllene","Limonene"],leaning:"Indica leaning"},
+    "628518000802":{name:"Demo Product — MTL",brand:"MTL Cannabis",category:"Dried Flower",thc:"THC 22–28%",cbd:"CBD <1%",terpenes:["Limonene","Beta-Caryophyllene","Linalool"],leaning:"Sativa leaning"}
+  };
 
-/* ---------- age gate ---------- */
-const gate=document.getElementById("ageGate");
-if(localStorage.getItem("ts_age_ok")==="1")gate.classList.add("hide");
-document.getElementById("ageYes").onclick=()=>{localStorage.setItem("ts_age_ok","1");gate.classList.add("hide")};
-document.getElementById("ageNo").onclick=()=>{gate.innerHTML="<p style='color:var(--ink-dim)'>This experience is only available to adults 19+.</p>"};
-
-/* ---------- tabs ---------- */
-const scanView=document.getElementById("scanView"),collView=document.getElementById("collView");
-const tabScan=document.getElementById("tabScan"),tabColl=document.getElementById("tabColl");
-tabScan.onclick=()=>{scanView.classList.remove("hide");collView.classList.add("hide");tabScan.classList.add("active");tabColl.classList.remove("active")};
-tabColl.onclick=()=>{collView.classList.remove("hide");scanView.classList.add("hide");tabColl.classList.add("active");tabScan.classList.remove("active");renderCollection()};
-
-/* ---------- GS1 parse ---------- */
-function parseScan(raw){
-  const out={gtin:null,lot:null,packaged:null};
-  let s=String(raw).replace(/[()]/g,"");
-  if(/^\d{8,14}$/.test(s)){out.gtin=s.replace(/^0+/,"");return out;}
-  const gs="\u001d";let i=0;
-  while(i<s.length-1){
-    const ai=s.slice(i,i+2);
-    if(ai==="01"){out.gtin=s.slice(i+2,i+16).replace(/^0+/,"");i+=16;}
-    else if(ai==="13"||ai==="11"||ai==="15"||ai==="17"){
-      if(ai==="13"){const v=s.slice(i+2,i+8);out.packaged="20"+v.slice(0,2)+"-"+v.slice(2,4)+"-"+v.slice(4,6);}
-      i+=8;
+  /* ----- GS1 parse ----- */
+  function parseScan(raw){
+    var out={gtin:null,lot:null,packaged:null};
+    var s=String(raw).replace(/[()]/g,"");
+    if(/^\d{8,14}$/.test(s)){out.gtin=s.replace(/^0+/,"");return out;}
+    var gs="\u001d",i=0;
+    while(i<s.length-1){
+      var ai=s.slice(i,i+2);
+      if(ai==="01"){out.gtin=s.slice(i+2,i+16).replace(/^0+/,"");i+=16;}
+      else if(ai==="13"||ai==="11"||ai==="15"||ai==="17"){if(ai==="13"){var v=s.slice(i+2,i+8);out.packaged="20"+v.slice(0,2)+"-"+v.slice(2,4)+"-"+v.slice(4,6);}i+=8;}
+      else if(ai==="10"||ai==="21"){var end=s.indexOf(gs,i+2);if(end===-1)end=s.length;if(ai==="10")out.lot=s.slice(i+2,end);i=end+1;}
+      else{i+=1;}
     }
-    else if(ai==="10"||ai==="21"){let end=s.indexOf(gs,i+2);if(end===-1)end=s.length;if(ai==="10")out.lot=s.slice(i+2,end);i=end+1;}
-    else{i+=1;}
+    return out;
   }
-  return out;
-}
 
-/* ---------- lookup ---------- */
-async function lookup(gtin){
-  if(!API_BASE)return DEMO_PRODUCTS[gtin]?{demo:true,...DEMO_PRODUCTS[gtin]}:null;
-  try{const r=await fetch(API_BASE+"/card?code="+encodeURIComponent(gtin));if(!r.ok)return null;return await r.json();}catch{return null;}
-}
-
-/* ---------- card render ---------- */
-const cardHolder=document.getElementById("cardHolder");
-function renderCard(p,scan){
-  if(!p){cardHolder.innerHTML="<div class='notfound'>We couldn't find that product.<br>Code read: <b style='color:var(--ink)'>"+(scan.gtin||"—")+"</b><br>Try re-scanning, or enter the code manually.</div>";return;}
-  const terps=(p.terpenes||[]).map((t,i)=>"<div class='terp'><span><span class='rank'>"+(i+1)+"</span>"+t+"</span></div>").join("");
-  cardHolder.innerHTML="<div class='card'>"+(p.demo?"<span class='demo-tag'>DEMO DATA</span>":"")+
-    "<div class='cat'>"+(p.category||"")+(p.leaning?" · "+p.leaning:"")+"</div>"+
-    "<h2>"+p.name+"</h2><div class='brandline'>"+(p.brand||"")+"</div>"+
-    "<div class='pills'>"+(p.thc?"<span class='pill'><b>"+p.thc+"</b></span>":"")+(p.cbd?"<span class='pill'>"+p.cbd+"</span>":"")+"</div>"+
-    "<div class='terps'><h3>Terpene Profile</h3>"+terps+"</div>"+
-    "<div class='meta'><span>"+(scan.packaged?"Packaged "+scan.packaged:"")+"</span><span>"+(scan.lot?"Lot "+scan.lot:"")+"</span></div></div>";
-}
-
-/* ---------- collection ---------- */
-function saveToCollection(p,scan){if(!p)return;const c=JSON.parse(localStorage.getItem("ts_collection")||"{}");c[scan.gtin]={p,scan,when:new Date().toISOString().slice(0,10)};localStorage.setItem("ts_collection",JSON.stringify(c));}
-function renderCollection(){
-  const c=JSON.parse(localStorage.getItem("ts_collection")||"{}"),keys=Object.keys(c);
-  const list=document.getElementById("collList"),empty=document.getElementById("collEmpty");
-  list.innerHTML="";empty.classList.toggle("hide",keys.length>0);
-  keys.reverse().forEach(k=>{const e=c[k];const d=document.createElement("div");d.className="coll-item";
-    d.innerHTML="<div class='n'>"+e.p.name+"</div><div class='d'>Scanned "+e.when+(e.scan.lot?" · Lot "+e.scan.lot:"")+"</div>";
-    d.onclick=()=>{tabScan.click();renderCard(e.p,e.scan);window.scrollTo(0,0)};list.appendChild(d);});
-}
-
-/* ---------- shared result handler ---------- */
-const statusEl=document.getElementById("status"),startBtn=document.getElementById("startBtn");
-function setStatus(m,err){statusEl.textContent=m;statusEl.classList.toggle("err",!!err);}
-async function handleCode(rawText){
-  const scan=parseScan(rawText);
-  if(!scan.gtin){setStatus("Read a code but found no product number. Try again or enter it manually.",true);return false;}
-  setStatus("Looking up "+scan.gtin+"…");
-  const p=await lookup(scan.gtin);
-  renderCard(p,scan);saveToCollection(p,scan);
-  setStatus("",false);
-  return true;
-}
-
-/* ---------- camera + wasm scanning ---------- */
-const video=document.getElementById("video");
-const controls=document.getElementById("controls"),torchBtn=document.getElementById("torchBtn");
-const zoomWrap=document.getElementById("zoomWrap"),zoomRange=document.getElementById("zoomRange");
-let running=false,rafId=null,currentTrack=null,lastDecode=0,canvas=null,ctx=null;
-
-function videoConstraints(hi){
-  const c={facingMode:{ideal:"environment"}};
-  if(hi){c.width={ideal:1920};c.height={ideal:1080};c.advanced=[{focusMode:"continuous"}];}
-  return c;
-}
-function stopStreams(){
-  running=false;
-  if(rafId){cancelAnimationFrame(rafId);rafId=null;}
-  const s=video.srcObject;if(s){s.getTracks().forEach(t=>t.stop());video.srcObject=null;}
-  currentTrack=null;controls.classList.add("hide");torchBtn.classList.remove("on");
-}
-function wireControls(stream){
-  currentTrack=stream.getVideoTracks()[0];if(!currentTrack)return;
-  const caps=currentTrack.getCapabilities?currentTrack.getCapabilities():{};
-  try{if(caps.focusMode&&caps.focusMode.includes("continuous"))currentTrack.applyConstraints({advanced:[{focusMode:"continuous"}]});}catch{}
-  controls.classList.remove("hide");
-  if(caps.torch){torchBtn.style.display="flex";torchBtn.onclick=async()=>{const on=!torchBtn.classList.contains("on");try{await currentTrack.applyConstraints({advanced:[{torch:on}]});torchBtn.classList.toggle("on",on);}catch{}};}
-  else{torchBtn.style.display="none";}
-  if(caps.zoom&&caps.zoom.max>caps.zoom.min){zoomWrap.classList.remove("hide");zoomRange.min=caps.zoom.min;zoomRange.max=caps.zoom.max;zoomRange.step=caps.zoom.step||0.1;zoomRange.value=currentTrack.getSettings().zoom||caps.zoom.min;zoomRange.oninput=()=>{try{currentTrack.applyConstraints({advanced:[{zoom:parseFloat(zoomRange.value)}]});}catch{}};}
-  else{zoomWrap.classList.add("hide");}
-}
-video.addEventListener("click",async()=>{
-  if(!currentTrack)return;const caps=currentTrack.getCapabilities?currentTrack.getCapabilities():{};
-  if(caps.focusMode&&caps.focusMode.includes("single-shot")){try{await currentTrack.applyConstraints({advanced:[{focusMode:"single-shot"}]});setTimeout(()=>{try{currentTrack.applyConstraints({advanced:[{focusMode:"continuous"}]});}catch{}},1200);}catch{}}
-});
-
-async function getStream(){
-  try{return await navigator.mediaDevices.getUserMedia({video:videoConstraints(true)});}
-  catch(e){return await navigator.mediaDevices.getUserMedia({video:videoConstraints(false)});}
-}
-
-async function scanLoop(){
-  if(!running)return;
-  const now=performance.now();
-  if(now-lastDecode>200 && video.readyState>=2 && video.videoWidth){
-    lastDecode=now;
-    if(!canvas){canvas=document.createElement("canvas");ctx=canvas.getContext("2d",{willReadFrequently:true});}
-    canvas.width=video.videoWidth;canvas.height=video.videoHeight;
-    ctx.drawImage(video,0,0,canvas.width,canvas.height);
-    try{
-      const img=ctx.getImageData(0,0,canvas.width,canvas.height);
-      const results=await readBarcodes(img,READER_OPTS);
-      if(results&&results.length){
-        const text=results[0].text;
-        if(text){running=false;stopStreams();const ok=await handleCode(text);startBtn.textContent="Scan another";startBtn.classList.remove("hide");return;}
-      }
-    }catch(e){/* keep looping */}
+  /* ----- lookup ----- */
+  function lookup(gtin){
+    if(!API_BASE)return Promise.resolve(DEMO_PRODUCTS[gtin]?Object.assign({demo:true},DEMO_PRODUCTS[gtin]):null);
+    return fetch(API_BASE+"/card?code="+encodeURIComponent(gtin)).then(function(r){return r.ok?r.json():null;}).catch(function(){return null;});
   }
-  rafId=requestAnimationFrame(scanLoop);
-}
 
-startBtn.onclick=async()=>{
-  startBtn.classList.add("hide");cardHolder.innerHTML="";document.getElementById("manualBox").classList.add("hide");
-  setStatus("Starting camera…");
+  /* ----- card render ----- */
+  var cardHolder=document.getElementById("cardHolder");
+  function renderCard(p,scan){
+    if(!p){cardHolder.innerHTML="<div class='notfound'>We couldn't find that product.<br>Code read: <b style='color:var(--ink)'>"+(scan.gtin||"—")+"</b><br>Try re-scanning, or enter the code manually.</div>";return;}
+    var terps=(p.terpenes||[]).map(function(t,i){return "<div class='terp'><span><span class='rank'>"+(i+1)+"</span>"+t+"</span></div>";}).join("");
+    cardHolder.innerHTML="<div class='card'>"+(p.demo?"<span class='demo-tag'>DEMO DATA</span>":"")+
+      "<div class='cat'>"+(p.category||"")+(p.leaning?" · "+p.leaning:"")+"</div>"+
+      "<h2>"+p.name+"</h2><div class='brandline'>"+(p.brand||"")+"</div>"+
+      "<div class='pills'>"+(p.thc?"<span class='pill'><b>"+p.thc+"</b></span>":"")+(p.cbd?"<span class='pill'>"+p.cbd+"</span>":"")+"</div>"+
+      "<div class='terps'><h3>Terpene Profile</h3>"+terps+"</div>"+
+      "<div class='meta'><span>"+(scan.packaged?"Packaged "+scan.packaged:"")+"</span><span>"+(scan.lot?"Lot "+scan.lot:"")+"</span></div></div>";
+  }
+
+  /* ----- collection ----- */
+  function saveToCollection(p,scan){if(!p)return;var c=JSON.parse(localStorage.getItem("ts_collection")||"{}");c[scan.gtin]={p:p,scan:scan,when:new Date().toISOString().slice(0,10)};localStorage.setItem("ts_collection",JSON.stringify(c));}
+  function renderCollection(){
+    var c=JSON.parse(localStorage.getItem("ts_collection")||"{}"),keys=Object.keys(c);
+    var list=document.getElementById("collList"),empty=document.getElementById("collEmpty");
+    list.innerHTML="";empty.classList.toggle("hide",keys.length>0);
+    keys.reverse().forEach(function(k){var e=c[k];var d=document.createElement("div");d.className="coll-item";
+      d.innerHTML="<div class='n'>"+e.p.name+"</div><div class='d'>Scanned "+e.when+(e.scan.lot?" · Lot "+e.scan.lot:"")+"</div>";
+      d.addEventListener("click",function(){tabScan.click();renderCard(e.p,e.scan);window.scrollTo(0,0);});list.appendChild(d);});
+  }
+
+  /* ----- status helper ----- */
+  var statusEl=document.getElementById("status");
+  function setStatus(m,err){statusEl.textContent=m;statusEl.classList.toggle("err",!!err);}
+
+  /* ----- shared handler used by BOTH scanner and manual entry ----- */
+  function handleCode(rawText){
+    var scan=parseScan(rawText);
+    if(!scan.gtin){setStatus("Read a code but found no product number. Try again or enter it manually.",true);return Promise.resolve(false);}
+    setStatus("Looking up "+scan.gtin+"…");
+    return lookup(scan.gtin).then(function(p){renderCard(p,scan);saveToCollection(p,scan);setStatus("",false);return true;});
+  }
+
+  /* ----- manual entry (works with NO scanner engine) ----- */
+  var manualToggle=document.getElementById("manualToggle"),manualBox=document.getElementById("manualBox");
+  var manualInput=document.getElementById("manualInput"),manualGo=document.getElementById("manualGo");
+  manualToggle.addEventListener("click",function(){manualBox.classList.toggle("hide");if(!manualBox.classList.contains("hide"))manualInput.focus();});
+  manualGo.addEventListener("click",function(){
+    var v=(manualInput.value||"").replace(/\D/g,"");
+    if(v.length<8){setStatus("Enter at least 8 digits from under the barcode.",true);return;}
+    if(window.__stopScan)window.__stopScan();
+    var startBtn=document.getElementById("startBtn");startBtn.textContent="Scan another";startBtn.classList.remove("hide");
+    handleCode(v);manualBox.classList.add("hide");manualInput.value="";
+  });
+  manualInput.addEventListener("keydown",function(e){if(e.key==="Enter")manualGo.click();});
+
+  /* expose to the scanner module */
+  window.__ts={handleCode:handleCode,setStatus:setStatus,clearCard:function(){cardHolder.innerHTML="";}};
+})();
+</script>
+
+<!-- ============================================================
+     SCRIPT 2 — SCANNER (module, may fail without locking the app).
+     Loads zxing-wasm. If the import fails, the catch disables
+     scanning gracefully — the app is already usable and manual
+     entry (above) still works.
+============================================================= -->
+<script type="module">
+(async function(){
+  var startBtn=document.getElementById("startBtn");
+  var video=document.getElementById("video");
+  var controls=document.getElementById("controls"),torchBtn=document.getElementById("torchBtn");
+  var zoomWrap=document.getElementById("zoomWrap"),zoomRange=document.getElementById("zoomRange");
+  var TS=window.__ts;
+
+  var readBarcodes;
   try{
-    const stream=await getStream();
-    video.srcObject=stream;await video.play();
-    wireControls(stream);
-    running=true;lastDecode=0;
-    setStatus("Scanning — hold the barcode inside the frame. Use zoom or the flashlight for small labels.");
-    scanLoop();
+    var mod=await import("https://cdn.jsdelivr.net/npm/zxing-wasm@2.1.0/dist/reader/index.js");
+    readBarcodes=mod.readBarcodes;
+    if(mod.prepareZXingModule){ mod.prepareZXingModule({fireImmediately:true}).catch(function(){}); }
   }catch(e){
-    setStatus("Camera unavailable ("+(e&&e.name?e.name:"error")+"). Check permissions and use HTTPS — or enter the code manually.",true);
-    startBtn.classList.remove("hide");
+    // Scanner engine unavailable — degrade gracefully.
+    TS.setStatus("Live scanning unavailable on this device. Use “Enter the code” below.",true);
+    startBtn.disabled=true;startBtn.style.opacity=".5";
+    return;
   }
-};
 
-/* ---------- manual entry ---------- */
-const manualToggle=document.getElementById("manualToggle"),manualBox=document.getElementById("manualBox");
-const manualInput=document.getElementById("manualInput"),manualGo=document.getElementById("manualGo");
-manualToggle.onclick=()=>{manualBox.classList.toggle("hide");if(!manualBox.classList.contains("hide"))manualInput.focus();};
-manualGo.onclick=async()=>{
-  const v=(manualInput.value||"").replace(/\D/g,"");
-  if(v.length<8){setStatus("Enter at least 8 digits from under the barcode.",true);return;}
-  stopStreams();startBtn.textContent="Scan another";startBtn.classList.remove("hide");
-  await handleCode(v);manualBox.classList.add("hide");manualInput.value="";
-};
-manualInput.addEventListener("keydown",e=>{if(e.key==="Enter")manualGo.click();});
+  var OPTS={tryHarder:true,formats:["DataMatrix","DataBar","DataBarExpanded","QRCode","UPC-A","EAN-13","EAN-8","UPC-E","Code128","Code39","PDF417"],maxNumberOfSymbols:1};
+  var running=false,rafId=null,currentTrack=null,lastDecode=0,canvas=null,ctx=null;
+
+  function stop(){running=false;if(rafId){cancelAnimationFrame(rafId);rafId=null;}var s=video.srcObject;if(s){s.getTracks().forEach(function(t){t.stop();});video.srcObject=null;}currentTrack=null;controls.classList.add("hide");torchBtn.classList.remove("on");}
+  window.__stopScan=stop;
+
+  function constraints(hi){var c={facingMode:{ideal:"environment"}};if(hi){c.width={ideal:1920};c.height={ideal:1080};c.advanced=[{focusMode:"continuous"}];}return c;}
+  function getStream(){return navigator.mediaDevices.getUserMedia({video:constraints(true)}).catch(function(){return navigator.mediaDevices.getUserMedia({video:constraints(false)});});}
+
+  function wire(stream){
+    currentTrack=stream.getVideoTracks()[0];if(!currentTrack)return;
+    var caps=currentTrack.getCapabilities?currentTrack.getCapabilities():{};
+    try{if(caps.focusMode&&caps.focusMode.indexOf("continuous")>-1)currentTrack.applyConstraints({advanced:[{focusMode:"continuous"}]});}catch(e){}
+    controls.classList.remove("hide");
+    if(caps.torch){torchBtn.style.display="flex";torchBtn.onclick=function(){var on=!torchBtn.classList.contains("on");currentTrack.applyConstraints({advanced:[{torch:on}]}).then(function(){torchBtn.classList.toggle("on",on);}).catch(function(){});};}
+    else{torchBtn.style.display="none";}
+    if(caps.zoom&&caps.zoom.max>caps.zoom.min){zoomWrap.classList.remove("hide");zoomRange.min=caps.zoom.min;zoomRange.max=caps.zoom.max;zoomRange.step=caps.zoom.step||0.1;zoomRange.value=(currentTrack.getSettings().zoom||caps.zoom.min);zoomRange.oninput=function(){currentTrack.applyConstraints({advanced:[{zoom:parseFloat(zoomRange.value)}]}).catch(function(){});};}
+    else{zoomWrap.classList.add("hide");}
+  }
+  video.addEventListener("click",function(){if(!currentTrack)return;var caps=currentTrack.getCapabilities?currentTrack.getCapabilities():{};if(caps.focusMode&&caps.focusMode.indexOf("single-shot")>-1){currentTrack.applyConstraints({advanced:[{focusMode:"single-shot"}]}).then(function(){setTimeout(function(){currentTrack.applyConstraints({advanced:[{focusMode:"continuous"}]}).catch(function(){});},1200);}).catch(function(){});}});
+
+  function loop(){
+    if(!running)return;
+    var now=performance.now();
+    if(now-lastDecode>200 && video.readyState>=2 && video.videoWidth){
+      lastDecode=now;
+      if(!canvas){canvas=document.createElement("canvas");ctx=canvas.getContext("2d",{willReadFrequently:true});}
+      canvas.width=video.videoWidth;canvas.height=video.videoHeight;
+      ctx.drawImage(video,0,0,canvas.width,canvas.height);
+      var img;try{img=ctx.getImageData(0,0,canvas.width,canvas.height);}catch(e){img=null;}
+      if(img){
+        readBarcodes(img,OPTS).then(function(results){
+          if(!running)return;
+          if(results&&results.length&&results[0].text){
+            var text=results[0].text;stop();
+            TS.handleCode(text).then(function(){startBtn.textContent="Scan another";startBtn.classList.remove("hide");});
+          }
+        }).catch(function(){});
+      }
+    }
+    rafId=requestAnimationFrame(loop);
+  }
+
+  startBtn.addEventListener("click",function(){
+    startBtn.classList.add("hide");TS.clearCard();document.getElementById("manualBox").classList.add("hide");
+    TS.setStatus("Starting camera…");
+    getStream().then(function(stream){
+      video.srcObject=stream;return video.play().then(function(){
+        wire(stream);running=true;lastDecode=0;
+        TS.setStatus("Scanning — hold the barcode inside the frame. Use zoom or the flashlight for small labels.");
+        loop();
+      });
+    }).catch(function(e){
+      TS.setStatus("Camera unavailable ("+(e&&e.name?e.name:"error")+"). Check permissions and use HTTPS — or enter the code manually.",true);
+      startBtn.classList.remove("hide");
+    });
+  });
+})();
 </script>
 </body>
 </html>
